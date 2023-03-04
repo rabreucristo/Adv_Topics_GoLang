@@ -7,7 +7,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"text/template"
 )
+
+var tmplt *template.Template
 
 type Person struct {
 	Name string `json:"name"`
@@ -19,10 +22,6 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleAdd(w http.ResponseWriter, r *http.Request) {
-	// if r.URL.Path != "/" {
-	// 	http.Error(w, "404 not found.", http.StatusNotFound)
-	// 	return
-	// }
 
 	switch r.Method {
 	case "GET":
@@ -62,7 +61,24 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleList(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "list.html")
+
+	if r.Method == "GET" {
+		tmplt, _ = template.ParseFiles("list.html")
+		readFile, _ := os.Open("people.json")
+		defer readFile.Close()
+		var existingPeople []Person
+		bytes, _ := io.ReadAll(readFile)
+		json.Unmarshal(bytes, &existingPeople)
+
+		data := map[string]interface{}{
+			"people": existingPeople,
+		}
+		err := tmplt.Execute(w, data)
+
+		if err != nil {
+			return
+		}
+	}
 }
 
 func main() {
@@ -71,7 +87,7 @@ func main() {
 	http.HandleFunc("/list", handleList)
 
 	fmt.Printf("Starting server for testing HTTP POST...\n")
-	if err := http.ListenAndServe(":3000", nil); err != nil {
+	if err := http.ListenAndServe("localhost:3000", nil); err != nil {
 		log.Fatal(err)
 	}
 }
