@@ -74,7 +74,14 @@ func (c Chequing) printBalance() string {
 	if c.fundsMessage != "" {
 		return fmt.Sprintf(c.fundsMessage)
 	} else {
-		return fmt.Sprintf("Your balance is %f ", balance)
+		var msgBalance = ""
+
+		if numberOfDepositsSavings%5 == 0 && numberOfDepositsSavings > 0 {
+			msgBalance = fmt.Sprintf("Your balance is %f and an interest fee of %f", balance, fee)
+		} else {
+			msgBalance = fmt.Sprintf("Your balance is %f ", balance)
+		}
+		return msgBalance
 	}
 
 }
@@ -96,15 +103,13 @@ func (s *Savings) deposit(amount float32) float32 {
 
 	numberOfDepositsSavings++
 
-	var balance = s.getBalanceSavings()
-
 	if numberOfDepositsSavings%5 == 0 && numberOfDepositsSavings > 0 {
-		balance += amount + interest
+		s.balance += amount + interest
 	} else {
-		balance += amount
+		s.balance += amount
 	}
 
-	return balance
+	return s.balance
 
 }
 
@@ -112,24 +117,28 @@ func (s *Savings) withdrawal(amount float32) (float32, error) {
 
 	numberOfWithdrawalsSavings++
 
-	var balance = s.getBalanceSavings()
-
-	if amount > balance {
+	if amount > s.balance {
 		return 0, errors.New("Insufficient Funds")
 	} else {
 
-		balance -= amount
+		s.balance -= amount
 
 	}
-	return balance, nil
+	return s.balance, nil
 
 }
 
 func (s Savings) printBalance() string {
 	var balance = s.getBalanceSavings()
 
-	return fmt.Sprintf("Your balance is %f", balance)
+	var msgBalance = ""
 
+	if numberOfDepositsSavings%5 == 0 && numberOfDepositsSavings > 0 {
+		msgBalance = fmt.Sprintf("Your balance is %f and an interest of %f", balance, interest)
+	} else {
+		msgBalance = fmt.Sprintf("Your balance is %f ", balance)
+	}
+	return msgBalance
 }
 
 func main() {
