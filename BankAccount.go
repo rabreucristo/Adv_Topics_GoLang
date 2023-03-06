@@ -76,7 +76,7 @@ func (c Chequing) printBalance() string {
 	} else {
 		var msgBalance = ""
 
-		if numberOfDepositsSavings%5 == 0 && numberOfDepositsSavings > 0 {
+		if numberOfWithdrawalsChequing%5 == 0 && numberOfWithdrawalsChequing > 0 {
 			msgBalance = fmt.Sprintf("Your balance is %f and an interest fee of %f", balance, fee)
 		} else {
 			msgBalance = fmt.Sprintf("Your balance is %f ", balance)
