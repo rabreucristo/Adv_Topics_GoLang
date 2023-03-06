@@ -77,9 +77,9 @@ func (c Chequing) printBalance() string {
 		var msgBalance = ""
 
 		if numberOfWithdrawalsChequing%5 == 0 && numberOfWithdrawalsChequing > 0 {
-			msgBalance = fmt.Sprintf("Your balance is %f and an interest fee of %f", balance, fee)
+			msgBalance = fmt.Sprintf("Your balance is $%.2f and an interest fee of $%.2f", balance, fee)
 		} else {
-			msgBalance = fmt.Sprintf("Your balance is %f ", balance)
+			msgBalance = fmt.Sprintf("Your balance is $%.2f ", balance)
 		}
 		return msgBalance
 	}
@@ -134,9 +134,9 @@ func (s Savings) printBalance() string {
 	var msgBalance = ""
 
 	if numberOfDepositsSavings%5 == 0 && numberOfDepositsSavings > 0 {
-		msgBalance = fmt.Sprintf("Your balance is %f and an interest of %f", balance, interest)
+		msgBalance = fmt.Sprintf("Your balance is $%.2f and an interest of $%.2f", balance, interest)
 	} else {
-		msgBalance = fmt.Sprintf("Your balance is %f ", balance)
+		msgBalance = fmt.Sprintf("Your balance is $%.2f ", balance)
 	}
 	return msgBalance
 }
