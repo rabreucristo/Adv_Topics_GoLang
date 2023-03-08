@@ -54,7 +54,7 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 		defer writeFile.Close()
 		jsonData, _ := json.MarshalIndent(people, "", "  ")
 		writeFile.Write(jsonData)
-		handleList(w, r)
+		http.Redirect(w, r, "/list", http.StatusSeeOther)
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
 	}
